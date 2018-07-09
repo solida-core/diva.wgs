@@ -11,7 +11,7 @@ references:
     provider: "_provider_"
     genome_release: "_release_"
 
-"genome_fasta": "_genome_fasta_"
+genome_fasta: "_genome_fasta_"
 
 paths:
   to_tmp: "path_to_tmp_dir"
