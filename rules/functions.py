@@ -1,6 +1,6 @@
+import errno
 import multiprocessing
 import os.path
-
 
 
 def cpu_count():
@@ -23,3 +23,22 @@ def references_abs_path():
 
 def resolve_single_filepath(basepath, filename):
     return [os.path.join(basepath, filename)]
+
+
+
+def tmp_path(path=''):
+    """
+    if does not exists, create path and return it. If any errors, return
+    default path
+    :param path: path
+    :return: path
+    """
+    default_path = os.getenv('TMPDIR', '/tmp')
+    if path:
+        try:
+            os.makedirs(path)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                return default_path
+        return path
+    return default_path
