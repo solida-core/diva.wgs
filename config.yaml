@@ -8,10 +8,10 @@ units: units.tsv
 
 references:
     basepath: "path_to_references_data"
-    provider: "provider"
-    genome_release: "release"
+    provider: "_provider_"
+    genome_release: "_release_"
 
-"genome_fasta": "genome.fasta"
+"genome_fasta": "_genome_fasta_"
 
 paths:
   to_tmp: "path_to_tmp_dir"
