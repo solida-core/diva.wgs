@@ -15,8 +15,8 @@ rule pre_rename_fastq_pe:
         r1=temp("reads/{sample}-{unit}-R1.fq.gz"),
         r2=temp("reads/{sample}-{unit}-R2.fq.gz")
     shell:
-        "cp {input.r1} {output.r1} &&"
-        "cp {input.r2} {output.r2} "
+        "ln -s {input.r1} {output.r1} &&"
+        "ln -s {input.r2} {output.r2} "
 
 
 rule trim_galore_pe:
