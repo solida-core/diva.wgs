@@ -1,5 +1,7 @@
 sample	unit	fq1	fq2
-ERS1004436	C25FWACXX.L007	/ELS/els9/users/biosciences/datasets/testdata/PRJEB12018/ERR1163918_1.fastq.gz	/ELS/els9/users/biosciences/datasets/testdata/PRJEB12018/ERR1163918_2.fastq.gz
+ERS1004436	C25FWACXX.L007.ERS1004436	path_to_datasets/ERR1163918_1.fastq.gz	path_to_datasets/ERR1163918_2.fastq.gz
+ERS1004436	C2HYBACXX.L002.ERS1004436	path_to_datasets/ERR1163919_1.fastq.gz	path_to_datasets/ERR1163919_2.fastq.gz
+ERS1004437	C0N08ACXX.L004.ERS1004437	path_to_datasets/ERR1163920_1.fastq.gz	path_to_datasets/ERR1163920_2.fastq.gz
 
 
 
