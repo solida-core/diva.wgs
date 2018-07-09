@@ -1,7 +1,6 @@
 rule multiqc:
     input:
-        expand("reads/trimmed/{unit.sample}-{unit.unit}-R1-trimmed.fq.gz",
-               unit=units.reset_index().itertuples())
+        "logs/.multiqc"
     output:
         "qc/multiqc.html"
     params:
@@ -10,3 +9,13 @@ rule multiqc:
         "logs/multiqc/multiqc.log"
     wrapper:
         "0.27.0/bio/multiqc"
+
+
+rule start_multiqc:
+    input:
+        expand("reads/merged_samples/{sample.sample}.cram",
+              sample=samples.reset_index().itertuples())
+    output:
+        "logs/.multiqc"
+    shell:
+        "touch {output}"

@@ -13,6 +13,8 @@ references:
 
 "genome_fasta": "genome.fasta"
 
+paths:
+  to_tmp: "path_to_tmp_dir"
 
 rules:
     bwa-mem:
@@ -21,4 +23,4 @@ rules:
     multiqc:
         arguments: ""
     trim_galore_pe:
-        arguments: "--illumina -q 20"
+        arguments: "--paired -q 20"

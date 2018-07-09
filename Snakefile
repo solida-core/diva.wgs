@@ -8,8 +8,13 @@ min_version("5.1.2")
 configfile: "config.yaml"
 
 samples = pd.read_table(config["samples"], index_col="sample")
-units = pd.read_table(config["units"], index_col=["sample", "unit"], dtype=str)
-units.index = units.index.set_levels([i.astype(str) for i in units.index.levels]) # enforce str in index
+units = pd.read_table(config["units"], index_col=["unit"], dtype=str)
+#units.index = units.index.set_levels([i.astype(str) for i in units.index.levels]) # enforce str in index
+
+
+##### local rules #####
+
+localrules: all, start_multiqc, multiqc, pre_rename_fastq_pe, post_rename_fastq_pe
 
 
 ##### target rules #####
@@ -17,11 +22,16 @@ units.index = units.index.set_levels([i.astype(str) for i in units.index.levels]
 rule all:
     input:
         "qc/multiqc.html",
-        expand("reads/trimmed/{unit.sample}-{unit.unit}-R{read}-trimmed.fq.gz",
+        expand("reads/trimmed/{unit.unit}-R{read}-trimmed.fq.gz",
                unit=units.reset_index().itertuples(),
                read=[1, 2]),
-        expand("reads/aligned/{unit.sample}-{unit.unit}_fixmate.cram",
-               unit=units.reset_index().itertuples())
+        expand("reads/aligned/{unit.unit}_fixmate.cram",
+               unit=units.reset_index().itertuples()),
+        expand("reads/sorted/{unit.unit}_sorted.cram",
+               unit=units.reset_index().itertuples()),
+        expand("reads/merged_samples/{sample.sample}.cram",
+              sample=samples.reset_index().itertuples())
+
 
 
 ##### setup singularity #####
@@ -38,8 +48,10 @@ include_prefix="rules"
 include:
     include_prefix + "/functions.py"
 include:
-    include_prefix + "/qc.smk"
-include:
     include_prefix + "/trimming.smk"
 include:
     include_prefix + "/alignment.smk"
+include:
+    include_prefix + "/samtools.smk"
+include:
+    include_prefix + "/qc.smk"
