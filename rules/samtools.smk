@@ -58,6 +58,8 @@ rule samtools_cram_to_bam:
         temp("reads/merged/{sample}.bam")
     conda:
         "../envs/samtools.yaml"
+    benchmark:
+        "benchmarks/samtools/cram_to_bam/{sample}.txt"
     params:
         tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),

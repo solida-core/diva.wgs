@@ -27,6 +27,8 @@ rule trim_galore_pe:
         extra=config.get("rules").get("multiqc").get("arguments")
     log:
         "logs/trim_galore/{unit}.log"
+    benchmark:
+        "benchmarks/trim_galore/{unit}.txt"
     wrapper:
         "0.27.0/bio/trim_galore/pe"
 
