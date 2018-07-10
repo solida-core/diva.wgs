@@ -14,7 +14,7 @@ units = pd.read_table(config["units"], index_col=["unit"], dtype=str)
 
 ##### local rules #####
 
-localrules: all, start_multiqc, multiqc, pre_rename_fastq_pe, post_rename_fastq_pe
+localrules: all, multiqc, pre_rename_fastq_pe, post_rename_fastq_pe
 
 
 ##### target rules #####
@@ -22,16 +22,17 @@ localrules: all, start_multiqc, multiqc, pre_rename_fastq_pe, post_rename_fastq_
 rule all:
     input:
         "qc/multiqc.html",
-        expand("reads/trimmed/{unit.unit}-R{read}-trimmed.fq.gz",
-               unit=units.reset_index().itertuples(),
-               read=[1, 2]),
-        expand("reads/aligned/{unit.unit}_fixmate.cram",
-               unit=units.reset_index().itertuples()),
-        expand("reads/sorted/{unit.unit}_sorted.cram",
-               unit=units.reset_index().itertuples()),
-        expand("reads/merged_samples/{sample.sample}.cram",
-              sample=samples.reset_index().itertuples())
-
+#        expand("reads/trimmed/{unit.unit}-R{read}-trimmed.fq.gz",
+#               unit=units.reset_index().itertuples(),
+#               read=[1, 2]),
+#        expand("reads/aligned/{unit.unit}_fixmate.cram",
+#               unit=units.reset_index().itertuples()),
+#        expand("reads/sorted/{unit.unit}_sorted.cram",
+#               unit=units.reset_index().itertuples()),
+#        expand("reads/merged/{sample.sample}.bam",
+#             sample=samples.reset_index().itertuples())
+        expand("reads/dedup/{sample.sample}.dedup.bam",
+             sample=samples.reset_index().itertuples())
 
 
 ##### setup singularity #####
@@ -53,5 +54,7 @@ include:
     include_prefix + "/alignment.smk"
 include:
     include_prefix + "/samtools.smk"
+include:
+    include_prefix + "/picard.smk"
 include:
     include_prefix + "/qc.smk"

@@ -37,7 +37,7 @@ rule samtools_merge:
                                               prefix='reads/sorted/',
                                               suffix='_sorted.cram')
     output:
-        "reads/merged_samples/{sample}.cram"
+        "reads/merged/{sample}.cram"
     conda:
         "../envs/samtools.yaml"
     benchmark:
@@ -49,3 +49,25 @@ rule samtools_merge:
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
     script:
         "../scripts/samtools_merge.py"
+
+
+rule samtools_cram_to_bam:
+    input:
+        "reads/merged/{sample}.cram"
+    output:
+        temp("reads/merged/{sample}.bam")
+    conda:
+        "../envs/samtools.yaml"
+    params:
+        tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")),
+        genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
+        output_fmt="BAM"
+    threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
+    shell:
+        "samtools view -b "
+        "--threads {threads} "
+        "-T {params.tmp_dir} "
+        "-O {params.output_fmt} "
+        "--reference {params.genome} "
+        "-o {output} "
+        "{input} "
