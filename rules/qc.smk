@@ -1,6 +1,13 @@
 rule multiqc:
     input:
-        "logs/.multiqc"
+        expand("qc/untrimmed_{unit.unit}.html",
+               unit=units.reset_index().itertuples()),
+        expand("qc/trimmed_{unit.unit}.html",
+               unit=units.reset_index().itertuples()),
+        expand("reads/trimmed/{unit.unit}-R1.fq.gz_trimming_report.txt",
+               unit=units.reset_index().itertuples()),
+        expand("reads/dedup/{sample.sample}.metrics.txt",
+              sample=samples.reset_index().itertuples())
     output:
         "qc/multiqc.html"
     params:
@@ -11,11 +18,36 @@ rule multiqc:
         "0.27.0/bio/multiqc"
 
 
-rule start_multiqc:
+# rule start_multiqc:
+#     input:
+#         expand("reads/merged/{sample.sample}.cram",
+#               sample=samples.reset_index().itertuples()),
+#         expand("reads/trimmed/{unit}-R1.fq.gz_trimming_report.txt",
+#                unit=units.reset_index().itertuples())
+#     output:
+#         "logs/.multiqc"
+#     shell:
+#         "touch {output}"
+
+
+rule fastqc:
     input:
-        expand("reads/merged_samples/{sample.sample}.cram",
-              sample=samples.reset_index().itertuples())
+       "reads/{unit}-R1.fq.gz",
+       "reads/{unit}-R2.fq.gz"
     output:
-        "logs/.multiqc"
-    shell:
-        "touch {output}"
+        html="qc/untrimmed_{unit}.html",
+        zip="qc/untrimmed_{unit}_fastqc.zip"
+    params: ""
+    wrapper:
+        "0.27.0/bio/fastqc"
+
+rule fastqc_trimmed:
+    input:
+       "reads/trimmed/{unit}-R1-trimmed.fq.gz",
+       "reads/trimmed/{unit}-R2-trimmed.fq.gz"
+    output:
+        html="qc/trimmed_{unit}.html",
+        zip="qc/trimmed_{unit}_fastqc.zip"
+    params: ""
+    wrapper:
+        "0.27.0/bio/fastqc"
