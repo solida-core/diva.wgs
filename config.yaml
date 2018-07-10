@@ -3,7 +3,6 @@
 # one row per sample. It can be parsed easily via pandas.
 
 samples: samples.tsv
-
 units: units.tsv
 
 references:
@@ -24,3 +23,5 @@ rules:
         arguments: ""
     trim_galore_pe:
         arguments: "--paired -q 20"
+    picard_MarkDuplicates:
+        arguments: "REMOVE_DUPLICATES=false ASSUME_SORTED=true CREATE_INDEX=true"

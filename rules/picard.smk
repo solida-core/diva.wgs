@@ -27,7 +27,7 @@ rule picard_MarkDuplicates:
        "../envs/picard.yaml"
    params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
-        #odpd = lambda wildcards: config.get("odpd").get(wildcards.sample,# 2500),
+        arguments=config.get("rules").get("picard_MarkDuplicates").get("arguments"),
         odpd = lambda wildcards: get_odp(wildcards, samples, 'odp')
    benchmark:
        "benchmarks/picard/MarkDuplicates/{sample}.txt"
@@ -35,6 +35,5 @@ rule picard_MarkDuplicates:
         "logs/picard/MarkDuplicates/{sample}.log"
    shell:
        "picard {params.custom} MarkDuplicates I={input} O={output.bam} "
-       "M={output.metrics} REMOVE_DUPLICATES=false ASSUME_SORTED=true "
+       "M={output.metrics} {params.arguments} "
        "OPTICAL_DUPLICATE_PIXEL_DISTANCE={params.odpd} "
-       "CREATE_INDEX=true"
