@@ -29,17 +29,19 @@ rule all:
 #               unit=units.reset_index().itertuples()),
 #        expand("reads/sorted/{unit.unit}_sorted.cram",
 #               unit=units.reset_index().itertuples()),
-        expand("reads/merged/{sample.sample}.cram",
-               sample=samples.reset_index().itertuples()),
+#        expand("reads/merged/{sample.sample}.cram",
+#               sample=samples.reset_index().itertuples()),
 #        expand("reads/dedup/{sample.sample}.dedup.bam",
 #             sample=samples.reset_index().itertuples()),
-        expand("reads/recalibrated/{sample.sample}.dedup.recal.bam",
-               sample=samples.reset_index().itertuples()),
-        expand("reads/recalibrated/{sample.sample}.recalibration_plots.pdf",
-               sample=samples.reset_index().itertuples()),
-        expand("reads/recalibrated/{sample.sample}.dedup.recal.ismetrics.pdf",
-               sample=samples.reset_index().itertuples()),
-        expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
+#        expand("reads/recalibrated/{sample.sample}.dedup.recal.bam",
+#               sample=samples.reset_index().itertuples()),
+#        expand("reads/recalibrated/{sample.sample}.recalibration_plots.pdf",
+#               sample=samples.reset_index().itertuples()),
+#        expand("reads/recalibrated/{sample.sample}.dedup.recal.ismetrics.pdf",
+#               sample=samples.reset_index().itertuples()),
+#        expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
+#               sample=samples.reset_index().itertuples()),
+        expand("variant_calling/{sample.sample}.g.vcf",
                sample=samples.reset_index().itertuples())
 
 
@@ -66,5 +68,7 @@ include:
     include_prefix + "/picard.smk"
 include:
     include_prefix + "/bqsr.smk"
+include:
+    include_prefix + "/call_variants.smk"
 include:
     include_prefix + "/qc.smk"
