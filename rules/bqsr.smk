@@ -40,7 +40,7 @@ rule gatk_ApplyBQSR:
         bam="reads/dedup/{sample}.dedup.bam",
         bqsr="reads/recalibrated/{sample}.recalibrate.grp"
     output:
-        "reads/recalibrated/{sample}.dedup.recal.bam"
+        temp("reads/recalibrated/{sample}.dedup.recal.bam")
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
