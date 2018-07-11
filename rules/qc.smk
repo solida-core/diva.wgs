@@ -7,7 +7,16 @@ rule multiqc:
         expand("reads/trimmed/{unit.unit}-R1.fq.gz_trimming_report.txt",
                unit=units.reset_index().itertuples()),
         expand("reads/dedup/{sample.sample}.metrics.txt",
+              sample=samples.reset_index().itertuples()),
+        expand("logs/gatk/BaseRecalibratorSpark/{sample.sample}_BQSR_data_processing_info.log",
+              sample=samples.reset_index().itertuples()),
+        expand("logs/gatk/ApplyBQSRSpark/{sample.sample}.post_recalibrate_info.log",
+              sample=samples.reset_index().itertuples()),
+        expand("reads/recalibrated/{sample.sample}.dedup.recal.ismetrics.txt",
+              sample=samples.reset_index().itertuples()),
+        expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
               sample=samples.reset_index().itertuples())
+
     output:
         "qc/multiqc.html"
     params:

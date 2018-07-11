@@ -4,7 +4,7 @@ rule bwa_mem:
         "reads/trimmed/{unit}-R1-trimmed.fq.gz",
         "reads/trimmed/{unit}-R2-trimmed.fq.gz"
     output: 
-        "reads/aligned/{unit}_fixmate.cram"
+        temp("reads/aligned/{unit}_fixmate.cram")
     conda:
         "../envs/bwa_mem.yaml"
     params:

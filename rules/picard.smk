@@ -34,6 +34,44 @@ rule picard_MarkDuplicates:
    log:
         "logs/picard/MarkDuplicates/{sample}.log"
    shell:
-       "picard {params.custom} MarkDuplicates I={input} O={output.bam} "
+       "picard {params.custom} MarkDuplicates "
+       "I={input} O={output.bam} "
        "M={output.metrics} {params.arguments} "
        "OPTICAL_DUPLICATE_PIXEL_DISTANCE={params.odpd} "
+
+
+rule picard_InsertSizeMetrics:
+   input:
+       bam="reads/recalibrated/{sample}.dedup.recal.bam"
+   output:
+       metrics="reads/recalibrated/{sample}.dedup.recal.ismetrics.txt",
+       histogram="reads/recalibrated/{sample}.dedup.recal.ismetrics.pdf"
+   conda:
+       "../envs/picard.yaml"
+   params:
+        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
+   benchmark:
+       "benchmarks/picard/IsMetrics/{sample}.txt"
+   shell:
+       "picard {params.custom} CollectInsertSizeMetrics "
+       "I={input.bam} "
+       "O={output.metrics} "
+       "H={output.histogram} "
+
+rule picard_WGSMetrics:
+   input:
+       bam="reads/recalibrated/{sample}.dedup.recal.bam"
+   output:
+       metrics="reads/recalibrated/{sample}.dedup.recal.wgsmetrics.txt"
+   conda:
+       "../envs/picard.yaml"
+   params:
+        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
+        genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
+   benchmark:
+       "benchmarks/picard/WGSMetrics/{sample}.txt"
+   shell:
+       "picard {params.custom} CollectWgsMetrics "
+       "I={input.bam} "
+       "O={output.metrics} "
+       "R={params.genome} "

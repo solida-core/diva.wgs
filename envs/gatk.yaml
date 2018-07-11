@@ -1,4 +1,4 @@
 channels:
   - bioconda
 dependencies:
-  - picard=2.18.9
+  - gatk4=4.0.5.2

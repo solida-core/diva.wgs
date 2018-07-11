@@ -61,15 +61,14 @@ rule samtools_cram_to_bam:
     benchmark:
         "benchmarks/samtools/cram_to_bam/{sample}.txt"
     params:
-        tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")),
-        genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
+        genome=resolve_single_filepath(*references_abs_path(),
+                                       config.get("genome_fasta")),
         output_fmt="BAM"
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
     shell:
         "samtools view -b "
         "--threads {threads} "
-        "-T {params.tmp_dir} "
-        "-O {params.output_fmt} "
-        "--reference {params.genome} "
+        "-T {params.genome} "
         "-o {output} "
+        "-O {params.output_fmt} "
         "{input} "
