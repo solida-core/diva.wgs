@@ -89,4 +89,4 @@ rule gatk_BQSR_quality_control:
         "-I {input.bam} "
         "-O {output} {log}; "
         "gatk AnalyzeCovariates --java-options {params.custom} "
-        "-before {input.bqsr} -after {output.post} -plots {output.plot} {log} "
+        "-before {input.pre} -after {output.post} -plots {output.plot} {log} "
