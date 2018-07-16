@@ -38,3 +38,8 @@ rules:
             - dbsnp
             - mills
             - ph1_indel
+    gatk_GenotypeGVCFs:
+        range: 26
+        extra:
+            - X
+            - M

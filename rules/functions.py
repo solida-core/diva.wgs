@@ -97,3 +97,9 @@ def java_params(tmp_dir='', percentage_to_preserve=30, stock_mem=1024 ** 3,
                                                   mem_min)).lower(),
                                   max(cpu_nums//fraction_for, 1),
                                   tmpdir)
+
+
+def _multi_flag(arguments):
+    if arguments:
+        return " ".join(flag + " " + arg for flag, arg in arguments)
+    return ''

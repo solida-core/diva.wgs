@@ -14,7 +14,7 @@ units = pd.read_table(config["units"], index_col=["unit"], dtype=str)
 
 ##### local rules #####
 
-localrules: all, multiqc, pre_rename_fastq_pe, post_rename_fastq_pe
+localrules: all, pre_rename_fastq_pe, post_rename_fastq_pe
 
 
 ##### target rules #####
@@ -32,7 +32,7 @@ rule all:
 #        expand("reads/merged/{sample.sample}.cram",
 #               sample=samples.reset_index().itertuples()),
 #        expand("reads/dedup/{sample.sample}.dedup.bam",
-#             sample=samples.reset_index().itertuples()),
+#            sample=samples.reset_index().itertuples()),
 #        expand("reads/recalibrated/{sample.sample}.dedup.recal.bam",
 #               sample=samples.reset_index().itertuples()),
 #        expand("reads/recalibrated/{sample.sample}.recalibration_plots.pdf",
@@ -40,9 +40,11 @@ rule all:
 #        expand("reads/recalibrated/{sample.sample}.dedup.recal.ismetrics.pdf",
 #               sample=samples.reset_index().itertuples()),
 #        expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
+#              sample=samples.reset_index().itertuples()),
+#        expand("variant_calling/{sample.sample}.g.vcf",
 #               sample=samples.reset_index().itertuples()),
-        expand("variant_calling/{sample.sample}.g.vcf",
-               sample=samples.reset_index().itertuples())
+#        expand("variant_calling/{chr}", chr=list(range(26))+['X','M'])
+         "variant_calling/all.vcf"
 
 
 ##### setup singularity #####
@@ -70,5 +72,7 @@ include:
     include_prefix + "/bqsr.smk"
 include:
     include_prefix + "/call_variants.smk"
+include:
+    include_prefix + "/joint_call.smk"
 include:
     include_prefix + "/qc.smk"

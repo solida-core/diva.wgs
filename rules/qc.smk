@@ -16,7 +16,6 @@ rule multiqc:
               sample=samples.reset_index().itertuples()),
         expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
               sample=samples.reset_index().itertuples())
-
     output:
         "qc/multiqc.html"
     params:
@@ -25,18 +24,6 @@ rule multiqc:
         "logs/multiqc/multiqc.log"
     wrapper:
         "0.27.0/bio/multiqc"
-
-
-# rule start_multiqc:
-#     input:
-#         expand("reads/merged/{sample.sample}.cram",
-#               sample=samples.reset_index().itertuples()),
-#         expand("reads/trimmed/{unit}-R1.fq.gz_trimming_report.txt",
-#                unit=units.reset_index().itertuples())
-#     output:
-#         "logs/.multiqc"
-#     shell:
-#         "touch {output}"
 
 
 rule fastqc:
