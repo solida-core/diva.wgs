@@ -80,8 +80,8 @@ def java_params(tmp_dir='', percentage_to_preserve=30, stock_mem=1024 ** 3,
     def preserve(resource, percentage, stock):
         return resource - max(resource * percentage // 100, stock)
 
-    params_template = "-Xms{} -Xmx{} -XX:ParallelGCThreads={} " \
-                      "-Djava.io.tmpdir={}"
+    params_template = "'-Xms{} -Xmx{} -XX:ParallelGCThreads={} " \
+                      "-Djava.io.tmpdir={}'"
 
     mem_min = 1024 ** 3 * 2  # 2GB
 
