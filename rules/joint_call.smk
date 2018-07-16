@@ -4,6 +4,8 @@ rule gatk_GenomicsDBImport:
                      sample=samples.reset_index().itertuples())
     output:
         temp("variant_calling/{chr}")
+    conda:
+       "../envs/gatk.yaml"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
@@ -28,6 +30,8 @@ rule gatk_GenotypeGVCFs:
                    'rules').get('gatk_GenotypeGVCFs').get('extra'))
     output:
         "variant_calling/all.vcf"
+    conda:
+       "../envs/gatk.yaml"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
