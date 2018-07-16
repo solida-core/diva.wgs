@@ -18,4 +18,4 @@ rule gatk_HaplotypeCaller_ERC_GVCF:
         "-I {input.bam} "
         "-O {output.gvcf} "
         "-ERC GVCF "
-        "{log} "
+        ">& {log} "
