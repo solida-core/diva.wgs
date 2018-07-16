@@ -71,11 +71,14 @@ rule picard_InsertSizeMetrics:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
    benchmark:
        "benchmarks/picard/IsMetrics/{sample}.txt"
+   log:
+       "logs/picard/IsMetrics/{sample}.log"
    shell:
        "picard {params.custom} CollectInsertSizeMetrics "
        "I={input.bam} "
        "O={output.metrics} "
        "H={output.histogram} "
+       "&> {log} "
 
 rule picard_WGSMetrics:
    input:
@@ -89,8 +92,11 @@ rule picard_WGSMetrics:
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
    benchmark:
        "benchmarks/picard/WGSMetrics/{sample}.txt"
+   log:
+       "logs/picard/WGSMetrics/{sample}.log"
    shell:
        "picard {params.custom} CollectWgsMetrics "
        "I={input.bam} "
        "O={output.metrics} "
        "R={params.genome} "
+       "&> {log} "

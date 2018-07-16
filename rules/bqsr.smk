@@ -92,5 +92,5 @@ rule gatk_BQSR_quality_control:
         "-O {output} "
         ">& {log.b}; "
         "gatk AnalyzeCovariates --java-options {params.custom} "
-        "-before {input.pre} -after {output.post} -plots {output.plot} {log} "
+        "-before {input.pre} -after {output.post} -plots {output.plot} "
         ">& {log.a}"
