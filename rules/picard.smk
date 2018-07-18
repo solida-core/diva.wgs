@@ -90,12 +90,14 @@ rule picard_WGSMetrics:
    params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
+        arguments=config.get("rules").get("picard_WGSMetrics").get("arguments")
    benchmark:
        "benchmarks/picard/WGSMetrics/{sample}.txt"
    log:
        "logs/picard/WGSMetrics/{sample}.log"
    shell:
        "picard {params.custom} CollectWgsMetrics "
+       "{params.arguments} "
        "I={input.bam} "
        "O={output.metrics} "
        "R={params.genome} "
