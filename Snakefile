@@ -41,9 +41,21 @@ rule all:
 #               sample=samples.reset_index().itertuples()),
 #        expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
 #              sample=samples.reset_index().itertuples()),
-#        expand("variant_calling/{sample.sample}.g.vcf",
-#               sample=samples.reset_index().itertuples()),
-#        expand("variant_calling/{chr}", chr=list(range(26))+['X','M'])
+#        expand("variant_calling/{sample.sample}.{chr}.g.vcf",
+#               sample=samples.reset_index().itertuples(),
+#               chr=list(range(1, 1+config.get('rules').get(
+#                   'gatk_GenotypeGVCFs').get('range')))+config.get(
+#                   'rules').get('gatk_GenotypeGVCFs').get('extra')),
+#        expand("variant_calling/{sample}.{chr}",
+#               sample="ERS1004436",
+#               chr=list(range(1, 1+config.get('rules').get(
+#                   'gatk_GenotypeGVCFs').get('range')))+config.get(
+#                   'rules').get('gatk_GenotypeGVCFs').get('extra')),
+#        expand("variant_calling/{sample}.{chr}",
+#               sample="ERS1004437",
+#               chr=list(range(1, 1+config.get('rules').get(
+#                   'gatk_GenotypeGVCFs').get('range')))+config.get(
+#                   'rules').get('gatk_GenotypeGVCFs').get('extra'))
          "variant_calling/all.vcf"
 
 

@@ -1,9 +1,22 @@
+
+# def _select_gvcf_by_chr(arguments):
+#     chr=arguments[2]
+#     gvcfs=arguments[1]
+#     flag=arguments[0]
+#     files = []
+#     for g in gvcfs:
+#         if "chr{}".format(chr) in g:
+#             files.append(g)
+#     return " ".join(flag + " " + arg for f in files)
+
 rule gatk_GenomicsDBImport:
     input:
-        gvcfs=expand("variant_calling/{sample.sample}.g.vcf",
+        gvcfs=expand("variant_calling/{sample.sample}.{{chr}}.g.vcf",
                      sample=samples.reset_index().itertuples())
     output:
-        temp("variant_calling/{chr}")
+        "variant_calling/{chr}"
+    wildcard_constraints:
+        chr="[0-9XM]"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
@@ -23,7 +36,8 @@ rule gatk_GenomicsDBImport:
 rule gatk_GenotypeGVCFs:
     input:
         expand("variant_calling/{chr}",
-        chr=list(range(1, 1+config.get('rules').get(
+               sample=samples.reset_index().itertuples(),
+               chr=list(range(1, 1+config.get('rules').get(
                    'gatk_GenotypeGVCFs').get('range')))+config.get(
                    'rules').get('gatk_GenotypeGVCFs').get('extra'))
     output:
