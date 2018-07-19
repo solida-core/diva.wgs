@@ -16,7 +16,7 @@ rule gatk_GenomicsDBImport:
     output:
         "variant_calling/{chr}"
     wildcard_constraints:
-        chr="[0-9XM]"
+        chr="[0-9XYM]+"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
