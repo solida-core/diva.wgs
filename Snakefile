@@ -56,7 +56,11 @@ rule all:
 #               chr=list(range(1, 1+config.get('rules').get(
 #                   'gatk_GenotypeGVCFs').get('range')))+config.get(
 #                   'rules').get('gatk_GenotypeGVCFs').get('extra'))
-         "variant_calling/all.vcf"
+         expand("variant_calling/all.{chr}.vcf",
+                    chr=list(range(1, 1+config.get('rules').get(
+                   'gatk_GenotypeGVCFs').get('range')))+config.get(
+                   'rules').get('gatk_GenotypeGVCFs').get('extra')),
+         "variant_calling/all.snp_recalibrated.indel_recalibrated.vcf"
 
 
 ##### setup singularity #####
@@ -86,5 +90,7 @@ include:
     include_prefix + "/call_variants.smk"
 include:
     include_prefix + "/joint_call.smk"
+include:
+    include_prefix + "/vqsr.smk"
 include:
     include_prefix + "/qc.smk"
