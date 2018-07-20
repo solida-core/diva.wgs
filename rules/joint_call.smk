@@ -34,6 +34,8 @@ rule gatk_GenotypeGVCFs:
         #            'rules').get('gatk_GenotypeGVCFs').get('extra'))
     output:
         "variant_calling/all.{chr}.vcf"
+    wildcard_constraints:
+        chr="[0-9XYM]+"
     conda:
        "../envs/gatk.yaml"
     params:
