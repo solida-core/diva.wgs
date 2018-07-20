@@ -44,7 +44,7 @@ rule gatk_ApplyBQSR:
     output:
         "reads/recalibrated/{sample}.dedup.recal.bam"
     conda:
-       "../envs/gatk.yaml"
+        "../envs/gatk.yaml"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
@@ -73,7 +73,7 @@ rule gatk_BQSR_quality_control:
         post="reads/recalibrated/{sample}.post.recalibrate.grp",
         plot="reads/recalibrated/{sample}.recalibration_plots.pdf"
     conda:
-       "../envs/gatk.yaml"
+        "../envs/gatk.yaml"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
@@ -91,7 +91,7 @@ rule gatk_BQSR_quality_control:
 #        "--spark-runner LOCAL "
 #        "--spark-master local[{threads}]  "
         "-I {input.bam} "
-        "-O {output} "
+        "-O {output.post} "
         ">& {log.b}; "
         "gatk AnalyzeCovariates --java-options {params.custom} "
         "-before {input.pre} -after {output.post} -plots {output.plot} "
