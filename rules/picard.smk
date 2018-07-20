@@ -17,7 +17,7 @@ rule mark_duplicates:
     input:
         "reads/merged/{sample}.bam"
     output:
-        bam="reads/dedup/{sample}.dedup.bam",
+        bam=temp("reads/dedup/{sample}.dedup.bam"),
         metrics="reads/dedup/{sample}.metrics.txt"
     log:
         "logs/picard/MarkDuplicates/{sample}.log"
