@@ -31,6 +31,12 @@ def resolve_single_filepath(basepath, filename):
     return [os.path.join(basepath, filename)]
 
 
+def resolve_multi_filepath(basepath, dictionary):
+    for k, v in dictionary.items():
+        dictionary[k] = os.path.join(basepath, v)
+    return dictionary
+
+
 def tmp_path(path=''):
     """
     if does not exists, create path and return it. If any errors, return
@@ -99,7 +105,7 @@ def java_params(tmp_dir='', percentage_to_preserve=30, stock_mem=1024 ** 3,
                                   tmpdir)
 
 
-def _multi_flag(arguments):
+def _multi_flag(flag, arguments):
     if arguments:
-        return " ".join(flag + " " + arg for flag, arg in arguments)
+        return " ".join(flag + " " + arg for arg in arguments)
     return ''
