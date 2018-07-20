@@ -41,7 +41,8 @@ rules:
             - mills
             - ph1_indel
     gatk_GenotypeGVCFs:
-        range: 26
+        range: 22
         extra:
             - X
+            - Y
             - M
