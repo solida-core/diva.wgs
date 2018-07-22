@@ -20,7 +20,7 @@ rule gatk_GenomicsDBImport:
         shell(
         "gatk GenomicsDBImport --java-options {params.custom} "
         "{gvcfs} "
-        "--genomicsdb-workspace-path cohort/{chr} "
+        "--genomicsdb-workspace-path cohort/{wildcards.chr} "
         "-L {wildcards.chr} "
         ">& {log} ")
 
