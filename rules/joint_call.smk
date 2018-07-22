@@ -5,7 +5,7 @@ rule gatk_GenomicsDBImport:
         gvcfs=expand("variant_calling/{sample.sample}.{{chr}}.g.vcf",
                      sample=samples.reset_index().itertuples())
     output:
-        touch("variant_calling/dbimport/{chr}")
+        touch("db/imports/{chr}")
     wildcard_constraints:
         chr="[0-9XYM]+"
     params:
@@ -18,15 +18,16 @@ rule gatk_GenomicsDBImport:
     run:
         gvcfs = _multi_flag("-V", input.gvcfs)
         shell(
-        "gatk GenomicsDBImport --java-options {params.custom} "
-        "{gvcfs} "
-        "--genomicsdb-workspace-path cohort/{wildcards.chr} "
-        "-L {wildcards.chr} "
-        ">& {log} ")
+            "mkdir -p db; "
+            "gatk GenomicsDBImport --java-options {params.custom} "
+            "{gvcfs} "
+            "--genomicsdb-workspace-path db/{wildcards.chr} "
+            "-L {wildcards.chr} "
+            ">& {log} ")
 
 rule gatk_GenotypeGVCFs:
     input:
-        "variant_calling/dbimport/{chr}"
+        "db/imports/{chr}"
         # expand("variant_calling/{chr}",
         #        sample=samples.reset_index().itertuples(),
         #        chr=list(range(1, 1+config.get('rules').get(
@@ -48,6 +49,6 @@ rule gatk_GenotypeGVCFs:
     shell:
         "gatk GenotypeGVCFs --java-options {params.custom} "
         "-R {params.genome} "
-        "-V gendb://cohort/{wildcards.chr} "
+        "-V gendb://db/{wildcards.chr} "
         "-O {output} "
         ">& {log} "
