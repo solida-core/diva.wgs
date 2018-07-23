@@ -13,7 +13,7 @@ rule gatk_MergeVcfs:
     benchmark:
         "benchmarks/gatk/MergeVcfs/all.txt"
     run:
-        vcfs = _multi_flag("-V", input.vcfs)
+        vcfs = _multi_flag("-I", input.vcfs)
         shell(
             "gatk MergeVcfs --java-options {params.custom} "
             "{vcfs} "
