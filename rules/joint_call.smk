@@ -28,13 +28,8 @@ rule gatk_GenomicsDBImport:
 rule gatk_GenotypeGVCFs:
     input:
         "db/imports/{chr}"
-        # expand("variant_calling/{chr}",
-        #        sample=samples.reset_index().itertuples(),
-        #        chr=list(range(1, 1+config.get('rules').get(
-        #            'gatk_GenotypeGVCFs').get('range')))+config.get(
-        #            'rules').get('gatk_GenotypeGVCFs').get('extra'))
     output:
-        "variant_calling/all.{chr}.vcf"
+        protected("variant_calling/all.{chr}.vcf")
     wildcard_constraints:
         chr="[0-9XYM]+"
     conda:
