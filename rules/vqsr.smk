@@ -27,13 +27,15 @@ def _get_recal_params(wildcards):
     if wildcards.type == "snp":
         return (
             "--mode SNP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR "
-            "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp}"
+            "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
+            "--resource agris_snp,known=false,training=true,truth=true,prior=10.0:{agris_snp} "
         ).format(**known_variants)
     else:
         return (
             "-mode INDEL -an QD -an FS -an SOR -an MQRankSum -an ReadPosRankSum "
-            "--maxGaussians 4 "
-            "-resource:dbsnp,known=true,training=false,truth=false,prior=2.0 {dbsnp}"
+            "--max-gaussians 4 "
+            "--resource:dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
+            "--resource agris_indel,known=false,training=true,truth=true,prior=10.0:{agris_indel} "
         ).format(**known_variants)
 
 
@@ -52,7 +54,7 @@ rule gatk_VariantRecalibrator:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=1),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
-        "log/gatk/VariantRecalibrator/{prefix}.{type}_recalibrate_info.log"
+        "logs/gatk/VariantRecalibrator/{prefix}.{type}_recalibrate_info.log"
     benchmark:
         "benchmarks/gatk/VariantRecalibrator/{prefix}.{type}_recalibrate_info.txt"
     shell:
@@ -61,7 +63,7 @@ rule gatk_VariantRecalibrator:
         "-V {input.vcf} "
         "{params.recal} "
         "-tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 90.0 "
-        "--recal-file {output.recal} "
+        "--output {output.recal} "
         "--tranches-file {output.tranches} "
         "--rscript-file {output.plotting} "
         ">& {log}"
@@ -88,6 +90,6 @@ rule gatk_ApplyVQSR:
         "gatk  ApplyVQSR --java-options {params.custom} "
         "-R {params.genome} "
         "-V {input.vcf} -mode {params.mode} "
-        "--recal-file {input.recal} --ts_filter_level 99.0 "
-        "--tranches-file {input.tranches} -o {output} "
+        "--recal-file {input.recal} -ts-filter-level 99.0 "
+        "--tranches-file {input.tranches} -O {output} "
         ">& {log}"
