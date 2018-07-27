@@ -2,7 +2,7 @@
 
 rule gatk_GenomicsDBImport:
     input:
-        gvcfs=expand("variant_calling/{sample.sample}.{{interval}}.g.vcf",
+        gvcfs=expand("variant_calling/{sample.sample}.{{interval}}.g.vcf.gz",
                      sample=samples.reset_index().itertuples())
     output:
         touch("db/imports/{interval}")
@@ -29,7 +29,7 @@ rule gatk_GenotypeGVCFs:
     input:
         "db/imports/{interval}"
     output:
-        protected("variant_calling/all.{interval}.vcf")
+        protected("variant_calling/all.{interval}.vcf.gz")
     # wildcard_constraints:
     #     chr="[0-9XYM]+"
     conda:

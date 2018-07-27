@@ -28,7 +28,7 @@ rule gatk_HaplotypeCaller_ERC_GVCF:
         bam="reads/recalibrated/{sample}.dedup.recal.bam"
 
     output:
-        gvcf="variant_calling/{sample}.{interval}.g.vcf"
+        gvcf="variant_calling/{sample}.{interval}.g.vcf.gz"
     conda:
        "../envs/gatk.yaml"
     params:

@@ -1,11 +1,11 @@
 rule gatk_MergeVcfs:
     input:
-        vcfs=expand("variant_calling/all.{interval}.vcf",
+        vcfs=expand("variant_calling/all.{interval}.vcf.gz",
                     interval=[str(i).zfill(4) for i in
                         range(0, int(config.get('rules').get
                         ('gatk_SplitIntervals').get('scatter-count')))])
     output:
-        "variant_calling/all.vcf"
+        "variant_calling/all.vcf.gz"
     params:
         custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
     log:
@@ -61,7 +61,7 @@ def _get_recal_params(wildcards):
 rule gatk_VariantRecalibrator:
     input:
         resolve_multi_filepath(*references_abs_path(), config["known_variants"]).values(),
-        vcf="variant_calling/{prefix}.vcf"
+        vcf="variant_calling/{prefix}.vcf.gz"
     output:
         recal=temp("variant_calling/{prefix}.{type,(snp|indel)}.recal"),
         tranches=temp("variant_calling/{prefix}.{type,(snp|indel)}.tranches"),
@@ -90,11 +90,11 @@ rule gatk_VariantRecalibrator:
 
 rule gatk_ApplyVQSR:
     input:
-        vcf="variant_calling/{prefix}.vcf",
+        vcf="variant_calling/{prefix}.vcf.gz",
         recal="variant_calling/{prefix}.{type}.recal",
         tranches="variant_calling/{prefix}.{type}.tranches"
     output:
-        "variant_calling/{prefix}.{type,(snp|indel)}_recalibrated.vcf"
+        "variant_calling/{prefix}.{type,(snp|indel)}_recalibrated.vcf.gz"
     conda:
        "../envs/gatk.yaml"
     params:
