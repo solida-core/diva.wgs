@@ -35,14 +35,12 @@ rules:
         arguments: "REMOVE_DUPLICATES=false ASSUME_SORTED=true CREATE_INDEX=true"
     picard_WGSMetrics:
         arguments: "MINIMUM_MAPPING_QUALITY=-1 MINIMUM_BASE_QUALITY=-1 READ_LENGTH=150 COUNT_UNPAIRED=true"
+    gatk_SplitIntervals:
+        scatter-count: 100
+        mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION
+        intervals: "path_to_intervals_file"
     gatk_BQSR:
         known_sites:
             - dbsnp
             - mills
             - ph1_indel
-    gatk_GenotypeGVCFs:
-        range: 22
-        extra:
-            - X
-            - Y
-            - M

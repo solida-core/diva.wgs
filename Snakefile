@@ -56,10 +56,15 @@ rule all:
 #               chr=list(range(1, 1+config.get('rules').get(
 #                   'gatk_GenotypeGVCFs').get('range')))+config.get(
 #                   'rules').get('gatk_GenotypeGVCFs').get('extra'))
-         expand("variant_calling/all.{chr}.vcf",
-                    chr=list(range(1, 1+config.get('rules').get(
-                   'gatk_GenotypeGVCFs').get('range')))+config.get(
-                   'rules').get('gatk_GenotypeGVCFs').get('extra')),
+         expand("variant_calling/all.{interval}.vcf",
+                interval=[str(i).zfill(4) for i in
+                        range(0, int(config.get('rules').get
+                        ('gatk_SplitIntervals').get('scatter-count')))]),
+                    #chr=list(config.get('chromosomes').get('prefix')+c for c in
+                    #list(str(i) for i in range(1, 1+config.get(
+                    ##'chromosomes').get('range')))+config.get('chromosomes')
+                    #.get(
+                    #'extra'))),
          "variant_calling/all.snp_recalibrated.indel_recalibrated.vcf"
 
 

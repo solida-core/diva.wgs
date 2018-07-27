@@ -4,6 +4,19 @@ import os.path
 import psutil
 
 
+##### Wildcard constraints #####
+wildcard_constraints:
+    type="snp|indel",
+    prefix="all|all.snp_recalibrated",
+    interval="|".join([str(i).zfill(4) for i in
+                        range(0, int(config.get('rules').get(
+                            'gatk_SplitIntervals').get('scatter-count')))]),
+    # interval_file="|".join([str(i).zfill(4)+'-scattered.intervals' for i in
+    #                     range(0, int(config.get("rules").get(
+    #                         "SplitIntervals").get("scatter-count")))])
+
+##### Helper functions #####
+
 def total_physical_mem_size():
     mem = psutil.virtual_memory()
     return mem.total

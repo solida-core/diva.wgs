@@ -1,9 +1,9 @@
 rule gatk_MergeVcfs:
     input:
-        vcfs=expand("variant_calling/all.{chr}.vcf",
-                    chr=list(range(1, 1+config.get('rules').get(
-                        'gatk_GenotypeGVCFs').get('range')))+config.get(
-                        'rules').get('gatk_GenotypeGVCFs').get('extra'))
+        vcfs=expand("variant_calling/all.{interval}.vcf",
+                    interval=[str(i).zfill(4) for i in
+                        range(0, int(config.get('rules').get
+                        ('gatk_SplitIntervals').get('scatter-count')))])
     output:
         "variant_calling/all.vcf"
     params:
@@ -22,20 +22,39 @@ rule gatk_MergeVcfs:
 
 
 # https://docs.python.org/dev/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations
+# def _get_recal_params(wildcards):
+#     known_variants = resolve_multi_filepath(*references_abs_path(), config["known_variants"])
+#     if wildcards.type == "snp":
+#         return (
+#             "--mode SNP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR "
+#             "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
+#             "--resource agris_snp,known=false,training=true,truth=true,prior=10.0:{agris_snp} "
+#         ).format(**known_variants)
+#     else:
+#         return (
+#             "-mode INDEL -an QD -an FS -an SOR -an MQRankSum -an ReadPosRankSum "
+#             "--max-gaussians 4 "
+#             "--resource:dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
+#             "--resource agris_indel,known=false,training=true,truth=true,prior=10.0:{agris_indel} "
+#         ).format(**known_variants)
+
+
 def _get_recal_params(wildcards):
     known_variants = resolve_multi_filepath(*references_abs_path(), config["known_variants"])
     if wildcards.type == "snp":
         return (
             "--mode SNP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR "
+            "--resource hapmap,known=false,training=true,truth=true,prior=15.0:{hapmap} "
+            "--resource omni,known=false,training=true,truth=true,prior=12.0:{omni} "
+            "--resource 1000G,known=false,training=true,truth=false,prior=10.0:{g1k} "
             "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
-            "--resource agris_snp,known=false,training=true,truth=true,prior=10.0:{agris_snp} "
         ).format(**known_variants)
     else:
         return (
             "-mode INDEL -an QD -an FS -an SOR -an MQRankSum -an ReadPosRankSum "
             "--max-gaussians 4 "
             "--resource:dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
-            "--resource agris_indel,known=false,training=true,truth=true,prior=10.0:{agris_indel} "
+            "--resource mills,known=false,training=true,truth=true,prior=12.0:{mills} "
         ).format(**known_variants)
 
 
