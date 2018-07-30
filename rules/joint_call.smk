@@ -45,5 +45,6 @@ rule gatk_GenotypeGVCFs:
         "gatk GenotypeGVCFs --java-options {params.custom} "
         "-R {params.genome} "
         "-V gendb://db/{wildcards.interval} "
+        "-G StandardAnnotation --use-new-qual-calculator "
         "-O {output} "
         ">& {log} "
