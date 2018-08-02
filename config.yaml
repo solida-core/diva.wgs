@@ -36,7 +36,7 @@ rules:
     picard_WGSMetrics:
         arguments: "MINIMUM_MAPPING_QUALITY=-1 MINIMUM_BASE_QUALITY=-1 READ_LENGTH=150 COUNT_UNPAIRED=true"
     gatk_SplitIntervals:
-        scatter-count: 100
+        scatter-count: 31
         mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION
         intervals: "path_to_intervals_file"
     gatk_BQSR:
