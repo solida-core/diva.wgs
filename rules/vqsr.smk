@@ -1,4 +1,4 @@
-rule gatk_MergeVcfs:
+rule concatVcfs:
     input:
         vcfs=expand("variant_calling/all.{interval}.vcf.gz",
                     interval=[str(i).zfill(4) for i in
@@ -6,19 +6,13 @@ rule gatk_MergeVcfs:
                         ('gatk_SplitIntervals').get('scatter-count')))])
     output:
         "variant_calling/all.vcf.gz"
-    params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
-    log:
-        "logs/gatk/MergeVcfs/all.info.log"
+    envs:
+        "../envs/bcftools.yaml"
     benchmark:
-        "benchmarks/gatk/MergeVcfs/all.txt"
-    run:
-        vcfs = _multi_flag("-I", input.vcfs)
-        shell(
-            "gatk MergeVcfs --java-options {params.custom} "
-            "{vcfs} "
-            "-O {output} "
-            ">& {log} ")
+        "benchmarks/bcftools/concat/all.txt"
+    shell:
+         "bcftools concat -a {input.vcfs} | bgzip -cf > {output}"
+         "tabix -p vcf {output}"
 
 
 # https://docs.python.org/dev/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations

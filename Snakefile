@@ -14,7 +14,7 @@ units = pd.read_table(config["units"], index_col=["unit"], dtype=str)
 
 ##### local rules #####
 
-localrules: all, pre_rename_fastq_pe, post_rename_fastq_pe
+localrules: all, pre_rename_fastq_pe, post_rename_fastq_pe, concatVcfs
 
 
 ##### target rules #####
