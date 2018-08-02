@@ -31,6 +31,8 @@ rule fastqc:
     output:
         html="qc/untrimmed_{unit}.html",
         zip="qc/untrimmed_{unit}_fastqc.zip"
+    log:
+        "logs/fastqc/{unit}.log"
     params: ""
     wrapper:
         "0.27.0/bio/fastqc"
@@ -42,6 +44,8 @@ rule fastqc_trimmed:
     output:
         html="qc/trimmed_{unit}.html",
         zip="qc/trimmed_{unit}_fastqc.zip"
+    log:
+        "logs/fastqc/{unit}.log"
     params: ""
     wrapper:
         "0.27.0/bio/fastqc"
