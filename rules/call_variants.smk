@@ -45,5 +45,7 @@ rule gatk_HaplotypeCaller_ERC_GVCF:
         "-I {input.bam} "
         "-O {output.gvcf} "
         "-ERC GVCF "
+        "--use-new-qual-calculator "
+        "-G Standard "
         "-L split/{wildcards.interval}-scattered.intervals "
         ">& {log} "
