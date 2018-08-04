@@ -69,7 +69,7 @@ rule gatk_VariantRecalibrator:
     params:
         recal=_get_recal_params,
         custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
-                           multiply_byr=2),
+                           multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/VariantRecalibrator/{prefix}.{type}_recalibrate_info.log"
