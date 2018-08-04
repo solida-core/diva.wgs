@@ -4,7 +4,8 @@ rule gatk_SplitIntervals:
     conda:
        "../envs/gatk.yaml"
     params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=1),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
         count=config.get("rules").get("gatk_SplitIntervals").get("scatter-count"),
         mode=config.get("rules").get("gatk_SplitIntervals").get("mode"),
@@ -32,13 +33,13 @@ rule gatk_HaplotypeCaller_ERC_GVCF:
     conda:
        "../envs/gatk.yaml"
     params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/HaplotypeCaller/{sample}.{interval}.genotype_info.log"
     benchmark:
         "benchmarks/gatk/HaplotypeCaller/{sample}.{interval}.txt"
-    threads: 2
     shell:
         "gatk HaplotypeCaller --java-options {params.custom} "
         "-R {params.genome} "

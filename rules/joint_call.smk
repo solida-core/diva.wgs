@@ -9,7 +9,8 @@ rule gatk_GenomicsDBImport:
     # wildcard_constraints:
     #     chr="[0-9XYM]+"
     params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/GenomicsDBImport/{interval}.info.log"
@@ -35,7 +36,8 @@ rule gatk_GenotypeGVCFs:
     conda:
        "../envs/gatk.yaml"
     params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/GenotypeGVCFs/all.{interval}.info.log"

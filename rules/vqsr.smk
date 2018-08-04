@@ -68,7 +68,8 @@ rule gatk_VariantRecalibrator:
        "../envs/gatk.yaml"
     params:
         recal=_get_recal_params,
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=1),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_byr=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/VariantRecalibrator/{prefix}.{type}_recalibrate_info.log"
@@ -97,7 +98,8 @@ rule gatk_ApplyVQSR:
        "../envs/gatk.yaml"
     params:
         mode=lambda wildcards: wildcards.type.upper(),
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=1),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/ApplyVQSR/{prefix}.{type}_recalibrate.log"

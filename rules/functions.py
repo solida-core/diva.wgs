@@ -68,15 +68,15 @@ def tmp_path(path=''):
     return default_path
 
 
-def java_params(tmp_dir='', percentage_to_preserve=30, stock_mem=1024 ** 3,
-                stock_cpu=2, fraction_for=20):
+def java_params(tmp_dir='', percentage_to_preserve=20, stock_mem=1024 ** 3,
+                stock_cpu=2, multiply_by=1):
     """
     Set Java params
     :param tmp_dir: path to tmpdir
     :param percentage_to_preserve: percentage of resources to preserve
     :param stock_mem: min memory to preserve
     :param stock_cpu: min cpu to preserve
-    :param fraction_for: divide resource for this param
+    :param multiply_by: multiply base resource by this param
     :return: string to return to configure java environments
     """
 
@@ -112,9 +112,9 @@ def java_params(tmp_dir='', percentage_to_preserve=30, stock_mem=1024 ** 3,
     tmpdir = tmp_path(tmp_dir)
 
     return params_template.format(bytes2human(mem_min).lower(),
-                                  bytes2human(max(mem_size//fraction_for,
+                                  bytes2human(max(mem_size//cpu_nums*multiply_by,
                                                   mem_min)).lower(),
-                                  max(cpu_nums//fraction_for, 1),
+                                  min(cpu_nums, multiply_by),
                                   tmpdir)
 
 

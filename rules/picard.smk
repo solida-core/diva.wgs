@@ -24,7 +24,7 @@ rule mark_duplicates:
     benchmark:
         "benchmarks/picard/MarkDuplicates/{sample}.txt"
     params:
-        java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=4),
+        java_params(tmp_dir=config.get("paths").get("to_tmp"), multiply_by=5),
         config.get("rules").get("picard_MarkDuplicates").get("arguments"),
         lambda wildcards: get_odp(wildcards, samples, 'odp')
     wrapper:
@@ -68,7 +68,8 @@ rule picard_InsertSizeMetrics:
    conda:
        "../envs/picard.yaml"
    params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=1),
    benchmark:
        "benchmarks/picard/IsMetrics/{sample}.txt"
    log:
@@ -88,7 +89,8 @@ rule picard_WGSMetrics:
    conda:
        "../envs/picard.yaml"
    params:
-        custom=java_params(tmp_dir=tmp_path(path=config.get("paths").get("to_tmp")), fraction_for=20),
+        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
+                           multiply_by=1),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
         arguments=config.get("rules").get("picard_WGSMetrics").get("arguments")
    benchmark:
