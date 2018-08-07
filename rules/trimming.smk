@@ -38,8 +38,8 @@ rule post_rename_fastq_pe:
         r1="reads/trimmed/{unit}-R1_val_1.fq.gz",
         r2="reads/trimmed/{unit}-R2_val_2.fq.gz"
     output:
-        r1="reads/trimmed/{unit}-R1-trimmed.fq.gz",
-        r2="reads/trimmed/{unit}-R2-trimmed.fq.gz"
+        r1=temp("reads/trimmed/{unit}-R1-trimmed.fq.gz"),
+        r2=temp("reads/trimmed/{unit}-R2-trimmed.fq.gz")
     shell:
         "mv {input.r1} {output.r1} &&"
         "mv {input.r2} {output.r2} "
