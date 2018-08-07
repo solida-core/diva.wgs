@@ -51,7 +51,7 @@ def _get_recal_params(wildcards):
             "-mode INDEL "
             "-an DP -an QD -an FS -an SOR -an MQRankSum -an ReadPosRankSum "
             "--max-gaussians 4 "
-            "--resource:dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
+            "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
             "--resource mills,known=false,training=true,truth=true,prior=12.0:{mills} "
         ).format(**known_variants)
 
