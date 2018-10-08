@@ -22,6 +22,8 @@ localrules: all, pre_rename_fastq_pe, post_rename_fastq_pe, concatVcfs
 rule all:
     input:
         "qc/multiqc.html",
+        expand("reads/merged/{sample.sample}.cram.crai",
+              sample=samples.reset_index().itertuples()),
 #        expand("reads/trimmed/{unit.unit}-R{read}-trimmed.fq.gz",
 #               unit=units.reset_index().itertuples(),
 #               read=[1, 2]),

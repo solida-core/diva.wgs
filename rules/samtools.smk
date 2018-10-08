@@ -51,6 +51,23 @@ rule samtools_merge:
         "../scripts/samtools_merge.py"
 
 
+rule samtools_index:
+    input:
+        "reads/merged/{sample}.cram"
+    output:
+         "reads/merged/{sample}.cram.crai"
+    conda:
+        "../envs/samtools.yaml"
+    benchmark:
+        "benchmarks/samtools/index/{sample}.txt"
+    threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
+    shell:
+        "samtools index "
+        "--threads {threads} "
+        "{input} "
+
+
+
 rule samtools_cram_to_bam:
     input:
         "reads/merged/{sample}.cram"
