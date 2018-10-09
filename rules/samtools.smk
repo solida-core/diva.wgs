@@ -63,7 +63,7 @@ rule samtools_index:
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
     shell:
         "samtools index "
-        "--threads {threads} "
+        "-@ {threads} "
         "{input} "
 
 
