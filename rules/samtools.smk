@@ -60,10 +60,8 @@ rule samtools_index:
         "../envs/samtools.yaml"
     benchmark:
         "benchmarks/samtools/index/{sample}.txt"
-    threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
     shell:
         "samtools index "
-        "-@ {threads} "
         "{input} "
 
 
