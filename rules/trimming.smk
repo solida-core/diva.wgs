@@ -24,7 +24,7 @@ rule trim_galore_pe:
         temp("reads/trimmed/{unit}-R2_val_2.fq.gz"),
         "reads/trimmed/{unit}-R2.fq.gz_trimming_report.txt"
     params:
-        extra=config.get("rules").get("multiqc").get("arguments")
+        extra=config.get("rules").get("trim_galore_pe").get("arguments")
     log:
         "logs/trim_galore/{unit}.log"
     benchmark:
