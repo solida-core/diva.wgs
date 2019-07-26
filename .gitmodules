@@ -1,0 +1,3 @@
+[submodule "dima"]
+	path = dima
+	url = git@github.com:solida-core/dima.git
