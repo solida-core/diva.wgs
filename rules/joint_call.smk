@@ -8,20 +8,23 @@ rule gatk_GenomicsDBImport:
         touch("db/imports/{interval}")
     params:
         custom=java_params(tmp_dir=config.get("tmp_dir"), multiply_by=2),
-        genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
+        genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
+        gvcfs=_multi_flag_dbi("-V", expand("variant_calling/{sample.sample}.{{interval}}.g.vcf.gz",
+                     sample=samples.reset_index().itertuples()))
+
     log:
         "logs/gatk/GenomicsDBImport/{interval}.info.log"
+    conda:
+       "../envs/gatk.yaml"
     benchmark:
         "benchmarks/gatk/GenomicsDBImport/{interval}.txt"
-    run:
-        gvcfs = _multi_flag("-V", input.gvcfs)
-        shell(
-            "mkdir -p db; "
-            "gatk GenomicsDBImport --java-options {params.custom} "
-            "{gvcfs} "
-            "--genomicsdb-workspace-path db/{wildcards.interval} "
-            "-L split/{wildcards.interval}-scattered.intervals "
-            ">& {log} ")
+    shell:
+        "mkdir -p db; "
+        "gatk GenomicsDBImport --java-options {params.custom} "
+        "{params.gvcfs} "
+        "--genomicsdb-workspace-path db/{wildcards.interval} "
+        "-L split/{wildcards.interval}-scattered.intervals "
+        ">& {log} "
 
 rule gatk_GenotypeGVCFs:
     input:

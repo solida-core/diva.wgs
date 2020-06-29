@@ -122,3 +122,15 @@ def _multi_flag(flag, arguments):
     if arguments:
         return " ".join(flag + " " + arg for arg in arguments)
     return ''
+def _multi_flag_dbi(flag, arguments):
+    if arguments:
+        return " ".join(flag + " " + arg for arg in arguments)
+    return ''
+
+
+def get_units_by_sample(wildcards, samples, label='units', prefix='before',
+                        suffix='after'):
+    return [prefix+i+suffix for i in samples.loc[wildcards.sample,
+                                                  [label]][0].split(',')]
+def get_odp(wildcards,samples,optical_dup='odp'):
+    return "OPTICAL_DUPLICATE_PIXEL_DISTANCE={}".format(samples.loc[wildcards.sample, [optical_dup]].dropna()[0])
