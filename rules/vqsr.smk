@@ -14,27 +14,6 @@ rule concatVcfs:
          "bcftools concat -a {input.vcfs} | bgzip -cf > {output};"
          "tabix -p vcf {output}"
 
-
-# https://docs.python.org/dev/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations
-# def _get_recal_params(wildcards):
-#     known_variants = resolve_multi_filepath(*references_abs_path(), config["known_variants"])
-#     if wildcards.type == "snp":
-#         return (
-#             "--mode SNP "
-#             "-an DP -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR "
-#             "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
-#             "--resource agris_snp,known=false,training=true,truth=true,prior=10.0:{agris_snp} "
-#         ).format(**known_variants)
-#     else:
-#         return (
-#             "-mode INDEL "
-#             "-an DP -an QD -an FS -an SOR -an MQRankSum -an ReadPosRankSum "
-#             "--max-gaussians 4 "
-#             "--resource dbsnp,known=true,training=false,truth=false,prior=2.0:{dbsnp} "
-#             "--resource agris_indel,known=false,training=true,truth=true,prior=10.0:{agris_indel} "
-#         ).format(**known_variants)
-
-
 def _get_recal_params(wildcards):
     known_variants = resolve_multi_filepath(*references_abs_path(), config["known_variants"])
     if wildcards.type == "snp":
@@ -68,8 +47,7 @@ rule gatk_VariantRecalibrator:
        "../envs/gatk.yaml"
     params:
         recal=_get_recal_params,
-        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
-                           multiply_by=2),
+        custom=java_params(tmp_dir=config.get("tmp_dir"), multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/VariantRecalibrator/{prefix}.{type}_recalibrate_info.log"
@@ -98,8 +76,7 @@ rule gatk_ApplyVQSR:
        "../envs/gatk.yaml"
     params:
         mode=lambda wildcards: wildcards.type.upper(),
-        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
-                           multiply_by=2),
+        custom=java_params(tmp_dir=config.get("tmp_dir"), multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/ApplyVQSR/{prefix}.{type}_recalibrate.log"

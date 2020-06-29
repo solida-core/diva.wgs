@@ -1,9 +1,7 @@
-# This file should contain everything to configure the workflow on a global scale.
-# In case of sample based data, it should be complemented by a samples.tsv file that contains
-# one row per sample. It can be parsed easily via pandas.
 
 samples: samples.tsv
 units: units.tsv
+reheader: reheader.tsv
 
 references:
     basepath: "path_to_references_data"
@@ -27,17 +25,21 @@ rules:
     bwa-mem:
         arguments: "-M"
         platform: "illumina"
-    multiqc:
-        arguments: ""
+   multiqc:
+        arguments: "--force --cl_config 'picard_config: { general_stats_target_coverage: [10,20,30] }' --interactive --cl_config 'max_table_rows: 700'"
     trim_galore_pe:
-        arguments: "--paired -q 20"
+        arguments: "--paired -q 20 --fastqc --fastqc_args '--outdir qc/fastqc --quiet'"
+    trim_galore_se:
+        arguments: "-q 20 --fastqc --fastqc_args '--outdir qc/fastqc --quiet'"
     picard_MarkDuplicates:
         arguments: "REMOVE_DUPLICATES=false ASSUME_SORTED=true CREATE_INDEX=true"
     picard_WGSMetrics:
         arguments: "MINIMUM_MAPPING_QUALITY=-1 MINIMUM_BASE_QUALITY=-1 READ_LENGTH=150 COUNT_UNPAIRED=true"
+    picard_gc:
+        params: ""
     gatk_SplitIntervals:
         scatter-count: 31
-        mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION
+        mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW
         intervals: "path_to_intervals_file"
     gatk_BQSR:
         known_sites:

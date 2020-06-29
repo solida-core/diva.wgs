@@ -6,11 +6,8 @@ rule gatk_GenomicsDBImport:
                      sample=samples.reset_index().itertuples())
     output:
         touch("db/imports/{interval}")
-    # wildcard_constraints:
-    #     chr="[0-9XYM]+"
     params:
-        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
-                           multiply_by=2),
+        custom=java_params(tmp_dir=config.get("tmp_dir"), multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/GenomicsDBImport/{interval}.info.log"
@@ -31,13 +28,10 @@ rule gatk_GenotypeGVCFs:
         "db/imports/{interval}"
     output:
         protected("variant_calling/all.{interval}.vcf.gz")
-    # wildcard_constraints:
-    #     chr="[0-9XYM]+"
     conda:
        "../envs/gatk.yaml"
     params:
-        custom=java_params(tmp_dir=config.get("paths").get("to_tmp"),
-                           multiply_by=2),
+        custom=java_params(tmp_dir=config.get("tmp_dir"), multiply_by=2),
         genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta"))
     log:
         "logs/gatk/GenotypeGVCFs/all.{interval}.info.log"
