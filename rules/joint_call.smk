@@ -23,7 +23,7 @@ rule gatk_GenomicsDBImport:
         "gatk GenomicsDBImport --java-options {params.custom} "
         "{params.gvcfs} "
         "--genomicsdb-workspace-path db/{wildcards.interval} "
-        "-L split/{wildcards.interval}-scattered.intervals "
+        "-L split/{wildcards.interval}-scattered.interval_list "
         ">& {log} "
 
 rule gatk_GenotypeGVCFs:

@@ -29,6 +29,7 @@ rule all:
                 interval=[str(i).zfill(4) for i in
                         range(0, int(config.get('rules').get
                         ('gatk_SplitIntervals').get('scatter-count')))]),
+        "variant_calling/all.vcf.gz",
         "variant_calling/all.snp_recalibrated.indel_recalibrated.vcf.gz",
         "delivery.completed"
 
@@ -58,6 +59,6 @@ include:
 include:
     include_prefix + "/qc.smk"
 include:
-    include_prefix + "/vsqr.smk"
+    include_prefix + "/vqsr.smk"
 include:
     include_prefix + "/delivery.smk"

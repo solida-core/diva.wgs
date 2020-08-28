@@ -25,7 +25,7 @@ rules:
         arguments: "-M"
         platform: "illumina"
    multiqc:
-        arguments: "--force --cl_config 'picard_config: { general_stats_target_coverage: [10,20,30] }' --interactive --cl_config 'max_table_rows: 700'"
+        arguments: "--force --interactive "
     trim_galore_pe:
         arguments: "--paired -q 20 --fastqc --fastqc_args '--outdir qc/fastqc --quiet'"
     trim_galore_se:
