@@ -6,3 +6,4 @@ channels:
 dependencies:
 - gatk4=4.1.8.1
 - r-base=4.0.3
+- r-ggplot2
