@@ -39,7 +39,7 @@ rules:
     gatk_SplitIntervals:
         scatter-count: 31
         mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW
-        intervals: "$TEST_ROOT/data/references/calling_regions.intervals"
+        intervals: "$TEST_ROOT/data/references/ucsc/hg19/intervals/calling_regions.intervals"
     gatk_BQSR:
         known_sites:
             - dbsnp
