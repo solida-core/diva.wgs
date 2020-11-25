@@ -23,8 +23,7 @@ localrules: all, pre_rename_fastq_pe, post_rename_fastq_pe, concatVcfs
 rule all:
     input:
         "qc/multiqc.html",
-        expand("reads/merged/{sample.sample}.cram.crai",
-              sample=samples.reset_index().itertuples()),
+        expand("reads/recalibrated/{sample.sample}.dedup.recal.cram", sample=samples.reset_index().itertuples()),
         expand("variant_calling/all.{interval}.vcf.gz",
                 interval=[str(i).zfill(4) for i in
                         range(0, int(config.get('rules').get

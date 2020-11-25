@@ -25,8 +25,8 @@ rule gatk_SplitIntervals:
 rule gatk_HaplotypeCaller_ERC_GVCF:
     input:
         'split/splitted',
-        cram="reads/recalibrated/{sample}.dedup.recal.cram"
-
+        cram="reads/recalibrated/{sample}.dedup.recal.cram",
+        crai="reads/recalibrated/{sample}.dedup.recal.cram.crai"
     output:
         gvcf="variant_calling/{sample}.{interval}.g.vcf.gz"
     conda:
