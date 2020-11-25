@@ -5,7 +5,7 @@ min_version("5.10.0")
 
 ##### load config and sample sheets #####
 
-configfile: "config.yaml"
+#configfile: "config.yaml"
 
 samples = pd.read_table(config["samples"], index_col="sample")
 units = pd.read_table(config["units"], index_col=["unit"], dtype=str)
