@@ -25,7 +25,7 @@ rule gatk_SplitIntervals:
 rule gatk_HaplotypeCaller_ERC_GVCF:
     input:
         'split/splitted',
-        bam="reads/recalibrated/{sample}.dedup.recal.bam"
+        cram="reads/recalibrated/{sample}.dedup.recal.cram"
 
     output:
         gvcf="variant_calling/{sample}.{interval}.g.vcf.gz"
@@ -41,7 +41,7 @@ rule gatk_HaplotypeCaller_ERC_GVCF:
     shell:
         "gatk HaplotypeCaller --java-options {params.custom} "
         "-R {params.genome} "
-        "-I {input.bam} "
+        "-I {input.cram} "
         "-O {output.gvcf} "
         "-ERC GVCF "
         "-G StandardAnnotation "
