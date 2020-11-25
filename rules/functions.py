@@ -30,14 +30,21 @@ def conservative_cpu_count(reserve_cores=1, max_cores=5):
     cores = max_cores if cpu_count() > max_cores else cpu_count()
     return max(cores - reserve_cores, 1)
 
+def expand_filepath(filepath):
+    filepath = os.path.expandvars(os.path.expanduser(filepath))
+    if not os.path.isabs(filepath):
+        raise FileNotFoundError(
+            errno.ENOENT, os.strerror(errno.ENOENT)+" (path must be absolute)", filepath)
+    return filepath
 
-def references_abs_path():
-    references = config.get('references')
-    basepath = references['basepath']
+
+def references_abs_path(ref='references'):
+    references = config.get(ref)
+    basepath = expand_filepath(references['basepath'])
     provider = references['provider']
-    genome = references['genome_release']
+    release = references['release']
 
-    return [os.path.join(basepath, provider, genome)]
+    return [os.path.join(basepath, provider, release)]
 
 
 def resolve_single_filepath(basepath, filename):
@@ -97,7 +104,11 @@ def java_params(tmp_dir='', percentage_to_preserve=20, stock_mem=1024 ** 3,
         return "%sB" % n
 
     def preserve(resource, percentage, stock):
-        return resource - max(resource * percentage // 100, stock)
+        preserved = resource - max(resource * percentage // 100, stock)
+        return preserved if preserved != 0 else stock
+
+    # def preserve(resource, percentage, stock):
+    #     return resource - max(resource * percentage // 100, stock)
 
     params_template = "'-Xms{} -Xmx{} -XX:ParallelGCThreads={} " \
                       "-Djava.io.tmpdir={}'"
@@ -106,9 +117,7 @@ def java_params(tmp_dir='', percentage_to_preserve=20, stock_mem=1024 ** 3,
 
     mem_size = preserve(total_physical_mem_size(), percentage_to_preserve,
                         stock_mem)
-
     cpu_nums = preserve(cpu_count(), percentage_to_preserve, stock_cpu)
-
     tmpdir = tmp_path(tmp_dir)
 
     return params_template.format(bytes2human(mem_min).lower(),
