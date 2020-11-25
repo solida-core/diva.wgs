@@ -31,7 +31,7 @@ rule all:
                         ('gatk_SplitIntervals').get('scatter-count')))]),
         "variant_calling/all.vcf.gz",
         "variant_calling/all.snp_recalibrated.indel_recalibrated.vcf.gz",
-        "delivery.completed"
+        # "delivery.completed"
 
 
 ##### load rules #####
@@ -60,5 +60,5 @@ include:
     include_prefix + "/qc.smk"
 include:
     include_prefix + "/vqsr.smk"
-include:
-    include_prefix + "/delivery.smk"
+# include:
+#     include_prefix + "/delivery.smk"
