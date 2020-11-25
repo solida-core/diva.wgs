@@ -1,0 +1,47 @@
+
+samples: ../files/samples.test.tsv
+units: ../files/units.test.tsv
+reheader: ../files/reheader.test.tsv
+internal_sid: "LIMS"
+
+references:
+    basepath: "$TEST_ROOT/data/references"
+    provider: "ucsc"
+    release: "hg19"
+
+genome_fasta: "ucsc.hg19.fasta"
+
+known_variants:
+    dbsnp: "known_variants/dbSNP146_chr22.vcf"
+    hapmap: "known_variants/hapmap_3.3.hg19.sites.chr22.vcf"
+    g1k: "known_variants/1000G_phase1.snps.high_confidence.hg19.sites.chr22.vcf"
+    omni: "known_variants/1000G_omni2.5.hg19.sites.chr22.vcf"
+    mills: "known_variants/Mills_and_1000G_gold_standard.indels.hg19.sites.chr22.vcf"
+    ph1_indels: "known_variants/1000G_phase1.indels.hg19.sites.chr22.vcf"
+tmp_dir: "path_to_tmp_dir"
+
+rules:
+    bwa-mem:
+        arguments: "-M"
+        platform: "illumina"
+    multiqc:
+        arguments: ""
+    trim_galore_pe:
+        arguments: "--paired -q 20 --fastqc --fastqc_args '--outdir qc/fastqc --quiet'"
+    trim_galore_se:
+        arguments: "-q 20 --fastqc --fastqc_args '--outdir qc/fastqc --quiet'"
+    picard_MarkDuplicates:
+        arguments: "REMOVE_DUPLICATES=false ASSUME_SORTED=true CREATE_INDEX=true"
+    picard_WGSMetrics:
+        arguments: "MINIMUM_MAPPING_QUALITY=-1 MINIMUM_BASE_QUALITY=-1 READ_LENGTH=150 COUNT_UNPAIRED=true"
+    picard_gc:
+        params: ""
+    gatk_SplitIntervals:
+        scatter-count: 31
+        mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW
+        intervals: "$TEST_ROOT/data/references/calling_regions.intervals"
+    gatk_BQSR:
+        known_sites:
+            - dbsnp
+            - mills
+            - ph1_indel
