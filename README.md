@@ -1,6 +1,6 @@
 [![depends](https://img.shields.io/badge/depends%20from-bioconda-brightgreen.svg)](http://bioconda.github.io/)
 [![snakemake](https://img.shields.io/badge/snakemake-5.3-brightgreen.svg)](https://snakemake.readthedocs.io/en/stable/)
-
+[![Build Status](https://travis-ci.com/solida-core/diva.wgs.svg?branch=master)](https://travis-ci.com/solida-core/diva.wgs)
 # DiVA WGS
 **DiVA WGS** is a pipeline for Next-Generation Sequencing **Whole Genome** data anlysis.
 
