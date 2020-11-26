@@ -2,10 +2,10 @@ rule multiqc:
     input:
         expand("reads/dedup/{sample.sample}.metrics.txt",
               sample=samples.reset_index().itertuples()),
-        expand("reads/recalibrated/{sample.sample}.recalibration_plots.pdf",
-               sample=samples.reset_index().itertuples()),
-        expand("reads/recalibrated/{sample.sample}.dedup.recal.ismetrics.txt",
-              sample=samples.reset_index().itertuples()),
+        # expand("reads/recalibrated/{sample.sample}.recalibration_plots.pdf",
+        #        sample=samples.reset_index().itertuples()),
+        # expand("reads/recalibrated/{sample.sample}.dedup.recal.ismetrics.txt",
+        #       sample=samples.reset_index().itertuples()),
         expand("reads/recalibrated/{sample.sample}.dedup.recal.wgsmetrics.txt",
               sample=samples.reset_index().itertuples())
     output:

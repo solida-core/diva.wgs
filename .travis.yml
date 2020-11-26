@@ -24,4 +24,4 @@ install:
 
 script:
   - snakemake --snakefile Snakefile --configfile test/files/config.test.yaml --use-conda --dryrun --quiet -d test/workdir
-  - snakemake --snakefile Snakefile --configfile test/files/config.test.yaml --use-conda --cores all --quiet -d test/workdir --until gatk_GenotypeGVCFs
+  - snakemake --snakefile Snakefile --configfile test/files/config.test.yaml --use-conda --cores all --quiet -d test/workdir --until concatVcfs

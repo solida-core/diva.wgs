@@ -37,9 +37,9 @@ rules:
     picard_gc:
         params: ""
     gatk_SplitIntervals:
-        scatter-count: 31
+        scatter-count: 3 #31
         mode: BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW
-        intervals: "$TEST_ROOT/data/references/ucsc/hg19/intervals/ucsc.hg19.intervals"
+        intervals: "$TEST_ROOT/data/references/ucsc/hg19/intervals/ucsc.hg19_chr22.intervals"
     gatk_BQSR:
         known_sites:
             - dbsnp
